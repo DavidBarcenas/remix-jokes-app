@@ -3,10 +3,20 @@ import type { Joke } from '@prisma/client';
 import { useLoaderData } from 'remix';
 import { Link } from 'remix';
 import { Outlet } from 'remix';
+import { z } from 'zod';
 import { db } from '~/utils/db.server';
 import stylesUrl from '~/styles/jokes.css';
 
 type LoaderData = { jokeListItems: Array<Pick<Joke, 'id' | 'name'>> };
+
+const LoaderDataSchema = z.object({
+  jokeListItems: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+    }),
+  ),
+});
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: stylesUrl }];
@@ -24,7 +34,7 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function Jokes() {
-  const data = useLoaderData<LoaderData>();
+  const data = LoaderDataSchema.parse(useLoaderData<LoaderData>());
 
   return (
     <div className="jokes-layout">
