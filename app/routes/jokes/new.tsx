@@ -33,11 +33,6 @@ export const action: ActionFunction = async ({
   request,
 }): Promise<Response | ActionData> => {
   const userId = await requireUserId(request);
-
-  if (!userId) {
-    return redirect('/login?redctTo=/jokes/new');
-  }
-
   const form = await request.formData();
   const name = form.get('name');
   const content = form.get('content');

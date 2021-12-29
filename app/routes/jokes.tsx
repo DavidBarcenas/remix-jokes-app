@@ -1,13 +1,17 @@
 import type { LinksFunction, LoaderFunction } from 'remix';
-import type { Joke } from '@prisma/client';
+import type { Joke, User } from '@prisma/client';
 import { useLoaderData } from 'remix';
 import { Link } from 'remix';
 import { Outlet } from 'remix';
 import { z } from 'zod';
 import { db } from '~/utils/db.server';
 import stylesUrl from '~/styles/jokes.css';
+import { getUser } from '~/utils/session.server';
 
-type LoaderData = { jokeListItems: Array<Pick<Joke, 'id' | 'name'>> };
+type LoaderData = {
+  user: User | null;
+  jokeListItems: Array<Pick<Joke, 'id' | 'name'>>;
+};
 
 const LoaderDataSchema = z.object({
   jokeListItems: z.array(
@@ -16,20 +20,33 @@ const LoaderDataSchema = z.object({
       name: z.string(),
     }),
   ),
+  user: z.nullable(
+    z.object({
+      id: z.string(),
+      createdAt: z.string(),
+      updatedAt: z.string(),
+      username: z.string(),
+      passwordHash: z.string(),
+    }),
+  ),
 });
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: stylesUrl }];
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  const jokeListItems = await db.joke.findMany({
+    take: 5,
+    select: { id: true, name: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  const user = await getUser(request);
   const data: LoaderData = {
-    jokeListItems: await db.joke.findMany({
-      take: 5,
-      select: { id: true, name: true },
-      orderBy: { createdAt: 'desc' },
-    }),
+    jokeListItems,
+    user,
   };
+
   return data;
 };
 
@@ -46,6 +63,18 @@ export default function Jokes() {
               <span className="logo-medium">J🤪KES</span>
             </Link>
           </h1>
+          {data.user ? (
+            <div className="user-info">
+              <span>{`Hi ${data.user.username}`}</span>
+              <form action="/logout" method="post">
+                <button type="submit" className="button">
+                  Logout
+                </button>
+              </form>
+            </div>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
         </div>
       </header>
       <main className="jokes-main">

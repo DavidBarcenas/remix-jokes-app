@@ -78,9 +78,32 @@ export async function requireUserId(
 
   if (!userId || typeof userId !== 'string') {
     const searchParams = new URLSearchParams([['redirectTo', redirectTo]]);
-
     throw redirect(`/login?${searchParams}`);
   }
 
   return userId;
+}
+
+export async function getUser(request: Request): Promise<User | null> {
+  const userId = await getUserId(request);
+
+  if (typeof userId !== 'string') {
+    return null;
+  }
+
+  try {
+    const user = await db.user.findUnique({ where: { id: userId } });
+    return user;
+  } catch {
+    throw logout(request);
+  }
+}
+
+export async function logout(request: Request): Promise<Response> {
+  const session = await storage.getSession(request.headers.get('Cookie'));
+  return redirect('/login', {
+    headers: {
+      'Set-Cookie': await storage.destroySession(session),
+    },
+  });
 }
