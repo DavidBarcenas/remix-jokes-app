@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from 'remix';
+import { Link, useLoaderData, useCatch } from 'remix';
 import { z } from 'zod';
 import type { LoaderFunction } from 'remix';
 
@@ -24,6 +24,11 @@ export const loader: LoaderFunction = async () => {
     take: 1,
     skip: randomRowNumber,
   });
+
+  if (!randomJoke) {
+    throw new Response('No random joke found', { status: 404 });
+  }
+
   const data: LoaderData = { randomJoke };
   return data;
 };
@@ -40,6 +45,17 @@ export default function JokesIndexRoute() {
       </Link>
     </div>
   );
+}
+
+export function CatchBundary() {
+  const caught = useCatch();
+
+  if (caught.status === 404) {
+    return (
+      <div className="error-container">There are no jokes to display.</div>
+    );
+  }
+  throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
 
 export function ErrorBoundary() {

@@ -8,6 +8,7 @@ module.exports = {
   plugins: ['prettier', 'import', 'jsx-a11y', 'jest'],
   rules: {
     'react/react-in-jsx-scope': 'off',
+    'react/no-unescaped-entities': 'off',
     'no-multiple-empty-lines': ['warn', { 'max': 2, 'maxEOF': 1 }],
     'jsx-a11y/media-has-caption': 'off',
     'jsx-a11y/label-has-associated-control': 'off',

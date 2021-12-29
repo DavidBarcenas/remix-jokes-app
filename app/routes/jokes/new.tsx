@@ -1,7 +1,7 @@
-import type { ActionFunction } from 'remix';
+import { ActionFunction, Link, LoaderFunction, useCatch } from 'remix';
 import { redirect, useActionData, json } from 'remix';
 import { db } from '~/utils/db.server';
-import { requireUserId } from '~/utils/session.server';
+import { getUserId, requireUserId } from '~/utils/session.server';
 
 function validateJokeName(name: string): string | undefined {
   if (name.length < 3) {
@@ -27,6 +27,14 @@ type ActionData = {
     name: string;
     content: string;
   };
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const userId = await getUserId(request);
+  if (!userId) {
+    throw new Response('Unauthorized', { status: 401 });
+  }
+  return {};
 };
 
 export const action: ActionFunction = async ({
@@ -115,6 +123,19 @@ export default function New() {
       </form>
     </div>
   );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  if (caught.status === 401) {
+    return (
+      <div className="error-container">
+        <p>You must be logged in to create a joke.</p>
+        <Link to="/login">Login</Link>
+      </div>
+    );
+  }
 }
 
 export function ErrorBoundary() {
