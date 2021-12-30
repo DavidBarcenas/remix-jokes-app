@@ -1,6 +1,6 @@
 import { Link, useLoaderData, useParams, useCatch, redirect } from 'remix';
 import { z } from 'zod';
-import type { LoaderFunction, ActionFunction } from 'remix';
+import type { LoaderFunction, ActionFunction, MetaFunction } from 'remix';
 
 import { db } from '~/utils/db.server';
 import { getUserId, requireUserId } from '~/utils/session.server';
@@ -18,6 +18,24 @@ const LoaderDataSchema = z.object({
   }),
   isOwner: z.boolean(),
 });
+
+export const meta: MetaFunction = ({
+  data,
+}: {
+  data: LoaderData | undefined;
+}) => {
+  if (!data) {
+    return {
+      title: 'No joke',
+      description: 'No joke found',
+    };
+  }
+
+  return {
+    title: `"${data.joke?.name}" joke`,
+    description: `Enjoy the "${data.joke?.name}" joke and much more`,
+  };
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = await getUserId(request);
