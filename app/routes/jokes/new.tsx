@@ -1,8 +1,9 @@
-import { Form, Link, useCatch } from 'remix';
+import { Form, Link, useCatch, useTransition } from 'remix';
 import type { ActionFunction, LoaderFunction } from 'remix';
 import { redirect, useActionData, json } from 'remix';
 import { db } from '~/utils/db.server';
 import { getUserId, requireUserId } from '~/utils/session.server';
+import { JokeDisplay } from '~/components/joke';
 
 function validateJokeName(name: string): string | undefined {
   if (name.length < 3) {
@@ -68,6 +69,27 @@ export const action: ActionFunction = async ({
 
 export default function New() {
   const actionData = useActionData<ActionData>();
+  const transition = useTransition();
+
+  if (transition.submission) {
+    const name = transition.submission.formData.get('name');
+    const content = transition.submission.formData.get('content');
+
+    if (
+      typeof name === 'string' &&
+      typeof content === 'string' &&
+      !validateJokeContent(content) &&
+      !validateJokeName(name)
+    ) {
+      return (
+        <JokeDisplay
+          joke={{ name, content }}
+          isOwner={true}
+          canDelete={false}
+        />
+      );
+    }
+  }
 
   return (
     <div>
