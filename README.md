@@ -1,53 +1,74 @@
-# Welcome to Remix!
+<div align="center">
 
-- [Remix Docs](https://remix.run/docs)
+# Remix Jokes App
 
-## Development
+Complete application made with the
+[tutorial](https://remix.run/docs/en/v1/tutorials/jokes) on the official
+[remix](https://remix.run/docs/en/v1) page to learn how to use this framework.
+The main objective is to learn to create an application without depending on the
+javascript load.
 
-From your terminal:
+</div>
 
-```sh
-npm run dev
+# Preview
+
+![App screenshot](./.readme-static/jokes.jpg)
+
+# Features
+
+- Nested and parameterized routes
+- Style management
+- Using Sqlite with Prisma
+- Mutations and validations (Server-Client side)
+- Authentication
+- Session management with cookies
+- Error handling
+- SEO with meta tags
+- Routes API
+
+# Running the app
+
+## Installation
+
+```bash
+git clone https://github.com/DavidBarcenas/remix-jokes-app.git
+cd remix-jokes-app
+yarn install
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+## Available Scripts
+
+### `yarn dev`
+
+Runs the app in the development mode. Open
+[http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits. You will also see any lint errors in the
+console.
 
 ## Deployment
 
-First, build your app for production:
+### `yarn build`
 
-```sh
-npm run build
-```
+First, build your app for production.
 
-Then run the app in production mode:
+### `yarn start`
 
-```sh
-npm start
-```
+Then run the app in production mode.
 
 Now you'll need to pick a host to deploy it to.
 
 ### DIY
 
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
+If you're familiar with deploying node applications, the built-in Remix app
+server is production-ready.
 
 Make sure to deploy the output of `remix build`
 
 - `build/`
 - `public/build/`
 
-### Using a Template
+# Credits
 
-When you ran `npx create-remix@latest` there were a few choices for hosting. You can run that again to create a new project, then copy over your `app/` folder to the new project that's pre-configured for your target server.
-
-```sh
-cd ..
-# create a new project, and pick a pre-configured host
-npx create-remix@latest
-cd my-new-remix-app
-# remove the new project's app (not the old one!)
-rm -rf app
-# copy your app over
-cp -R ../my-old-remix-app/app app
-```
+Feel free to fork this project and improve it. Give a ⭐️ if you like this
+project!
