@@ -10,11 +10,11 @@ javascript load.
 
 </div>
 
-# Preview
+## Preview
 
 ![App screenshot](./.readme-static/jokes.jpg)
 
-# Features
+## Features
 
 - Nested and parameterized routes
 - Style management
@@ -26,9 +26,9 @@ javascript load.
 - SEO with meta tags
 - Routes API
 
-# Running the app
+## Running the app
 
-## Installation
+### Installation
 
 ```bash
 git clone https://github.com/DavidBarcenas/remix-jokes-app.git
@@ -36,9 +36,9 @@ cd remix-jokes-app
 yarn install
 ```
 
-## Available Scripts
+### Available Scripts
 
-### `yarn dev`
+#### `yarn dev`
 
 Runs the app in the development mode. Open
 [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -46,13 +46,13 @@ Runs the app in the development mode. Open
 The page will reload if you make edits. You will also see any lint errors in the
 console.
 
-## Deployment
+### Deployment
 
-### `yarn build`
+#### `yarn build`
 
 First, build your app for production.
 
-### `yarn start`
+#### `yarn start`
 
 Then run the app in production mode.
 
@@ -68,7 +68,7 @@ Make sure to deploy the output of `remix build`
 - `build/`
 - `public/build/`
 
-# Credits
+## Credits
 
 Feel free to fork this project and improve it. Give a ⭐️ if you like this
 project!
